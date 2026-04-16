@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Mood Tracker 🌈 & Space Quiz 🚀</title>
+  <title>My Mood Tracker 🌈 & Animal Quiz 🐾</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -118,7 +118,7 @@
 
     /* Start Screen */
     #quizStart {
-      background: linear-gradient(135deg, #1a237e, #283593);
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
       border-radius: 30px;
       padding: 36px 28px;
       text-align: center;
@@ -129,11 +129,33 @@
     #quizStart h2 { font-size: 2rem; margin-bottom: 10px; text-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
     #quizStart p  { font-size: 1.1rem; opacity: 0.88; line-height: 1.7; margin-bottom: 24px; }
 
-    /* Big action buttons (Start, Next, Play Again) */
+    /* Category pills on start screen */
+    .category-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+    .cat-pill {
+      background: rgba(255,255,255,0.18);
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 1rem;
+      color: #fff;
+      cursor: pointer;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .cat-pill:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+    .cat-pill.active { background: #ffd600; color: #1b5e20; border-color: #ffd600; font-weight: bold; }
+
+    /* Big action buttons */
     .big-btn {
       display: inline-block;
       background: linear-gradient(135deg, #ffd600, #ffab00);
-      color: #1a237e;
+      color: #1b5e20;
       font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
       font-size: 1.4rem;
       font-weight: bold;
@@ -153,18 +175,42 @@
       border-radius: 26px;
       padding: 28px 24px 24px;
       box-shadow: 0 6px 24px rgba(0,0,0,0.14);
-      border: 4px solid #7986cb;
+      border: 4px solid #4caf50;
       animation: popIn 0.4s ease;
     }
     .q-progress {
       font-size: 1rem;
-      color: #7986cb;
-      margin-bottom: 10px;
+      color: #388e3c;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    /* Progress bar */
+    .progress-bar-bg {
+      background: #e8f5e9;
+      border-radius: 10px;
+      height: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #66bb6a, #43a047);
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+    .q-category-badge {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
       font-weight: bold;
     }
     .q-text {
       font-size: 1.35rem;
-      color: #1a237e;
+      color: #1b5e20;
       margin-bottom: 22px;
       line-height: 1.55;
     }
@@ -176,21 +222,38 @@
       gap: 13px;
     }
     .ans-btn {
-      background: #e8eaf6;
-      border: 3px solid #7986cb;
+      background: #e8f5e9;
+      border: 3px solid #66bb6a;
       border-radius: 18px;
-      padding: 15px 18px;
-      font-size: 1.15rem;
+      padding: 16px 20px;
+      font-size: 1.18rem;
       font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
-      color: #283593;
+      color: #1b5e20;
       cursor: pointer;
       text-align: left;
       transition: transform 0.13s, background 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .ans-btn:hover:not(:disabled) { transform: scale(1.02); background: #c5cae9; }
+    .ans-btn .ans-letter {
+      background: #a5d6a7;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    .ans-btn:hover:not(:disabled) { transform: scale(1.02); background: #c8e6c9; }
     .ans-btn.correct  { background: #c8e6c9 !important; border-color: #388e3c !important; color: #1b5e20 !important; }
     .ans-btn.wrong    { background: #ffcdd2 !important; border-color: #c62828 !important; color: #b71c1c !important; }
-    .ans-btn:disabled { cursor: default; }
+    .ans-btn.correct .ans-letter { background: #81c784; }
+    .ans-btn.wrong    .ans-letter { background: #ef9a9a; }
+    .ans-btn:disabled { cursor: default; opacity: 0.85; }
 
     /* Feedback bar */
     #feedbackBar {
@@ -210,7 +273,7 @@
     /* Score Screen */
     #quizScore { display: none; }
     .score-card {
-      background: linear-gradient(135deg, #1a237e, #283593);
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
       border-radius: 30px;
       padding: 36px 28px;
       text-align: center;
@@ -221,7 +284,26 @@
     .score-card .score-emoji { font-size: 4.5rem; margin-bottom: 10px; }
     .score-card h2 { font-size: 2rem; margin-bottom: 8px; }
     .score-card .score-num { font-size: 3.5rem; font-weight: bold; color: #ffd600; margin: 10px 0; text-shadow: 2px 2px 0 rgba(0,0,0,0.25); }
-    .score-card .score-msg { font-size: 1.15rem; opacity: 0.9; line-height: 1.65; margin-bottom: 26px; }
+    .score-card .score-msg { font-size: 1.15rem; opacity: 0.9; line-height: 1.65; margin-bottom: 20px; }
+
+    /* Review list on score screen */
+    .review-list {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .review-item {
+      background: rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    .review-item .ri-q { font-weight: bold; margin-bottom: 4px; }
+    .review-item.ri-correct { border-left: 5px solid #a5d6a7; }
+    .review-item.ri-wrong   { border-left: 5px solid #ef9a9a; }
+
+    .score-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
     /* === FOOTER === */
     footer {
@@ -240,6 +322,7 @@
       .mood-btn .mood-label { font-size: 1.2rem; }
       .q-text { font-size: 1.15rem; }
       .ans-btn { font-size: 1rem; }
+      .big-btn { font-size: 1.15rem; padding: 14px 28px; }
     }
   </style>
 </head>
@@ -287,27 +370,36 @@
   </div>
 
   <!-- ===== DIVIDER ===== -->
-  <div class="section-divider">· · · 🚀 · · ·</div>
+  <div class="section-divider">· · · 🐾 · · ·</div>
 
-  <!-- ===== SPACE QUIZ SECTION ===== -->
+  <!-- ===== ANIMAL QUIZ SECTION ===== -->
   <div id="quizSection">
 
     <!-- START SCREEN -->
     <div id="quizStart">
-      <div class="quiz-star-row">🌟 🪐 🌟</div>
-      <h2>Space Quiz Challenge!</h2>
-      <p>Think you know your planets, stars, and galaxies? Test your knowledge with 3 awesome space questions! 👩‍🚀</p>
-      <button class="big-btn" id="startQuizBtn">🚀 Start Quiz!</button>
+      <div class="quiz-star-row">🦁 🐬 🦋</div>
+      <h2>Amazing Animal Quiz!</h2>
+      <p>How well do you know the animal kingdom? Pick a category and test your knowledge with 3 wild questions! 🌿</p>
+      <!-- Category selector -->
+      <div class="category-pills" id="categoryPills">
+        <button class="cat-pill active" data-cat="mammals">🦁 Mammals</button>
+        <button class="cat-pill" data-cat="ocean">🐬 Ocean</button>
+        <button class="cat-pill" data-cat="insects">🦋 Insects</button>
+        <button class="cat-pill" data-cat="birds">🦅 Birds</button>
+      </div>
+      <button class="big-btn" id="startQuizBtn">🐾 Start Quiz!</button>
     </div>
 
     <!-- QUESTION SCREEN -->
     <div id="quizQuestion">
       <div class="q-card">
         <div class="q-progress" id="qProgress">Question 1 of 3</div>
-        <div class="q-text"     id="qText">Question goes here</div>
-        <div class="answers-grid" id="answersGrid">
-          <!-- Answer buttons injected by JS -->
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
         </div>
+        <div class="q-category-badge" id="qCatBadge">🦁 Mammals</div>
+        <div class="q-text" id="qText">Question goes here</div>
+        <div class="answers-grid" id="answersGrid"></div>
         <div id="feedbackBar"></div>
         <div style="text-align:center;">
           <button class="big-btn" id="nextBtn">Next Question ➡️</button>
@@ -320,9 +412,13 @@
       <div class="score-card">
         <div class="score-emoji" id="scoreEmoji">🏆</div>
         <h2>Quiz Complete!</h2>
-        <div class="score-num"  id="scoreNum">0 / 3</div>
-        <div class="score-msg"  id="scoreMsg">Great job!</div>
-        <button class="big-btn" id="playAgainBtn">🔄 Play Again</button>
+        <div class="score-num" id="scoreNum">0 / 3</div>
+        <div class="score-msg" id="scoreMsg">Great job!</div>
+        <div class="review-list" id="reviewList"></div>
+        <div class="score-btns">
+          <button class="big-btn" id="playAgainBtn">🔄 Try Again</button>
+          <button class="big-btn" id="changeCatBtn" style="background:linear-gradient(135deg,#a5d6a7,#66bb6a);color:#1b5e20;">🔀 New Category</button>
+        </div>
       </div>
     </div>
 
@@ -330,7 +426,7 @@
 
   <!-- ===== FOOTER ===== -->
   <footer>
-    All feelings are valid 💛 &nbsp;|&nbsp; Keep exploring the universe 🚀
+    All feelings are valid 💛 &nbsp;|&nbsp; Keep exploring the animal kingdom 🐾
   </footer>
 
   <script>
@@ -388,7 +484,6 @@
       function showMood(moodKey) {
         var m = moods[moodKey];
         body.style.background = m.bg;
-        body.style.transition = 'background 0.7s ease';
         if (mainHeader) { mainHeader.style.borderColor = m.border; }
         if (headerTitle) { headerTitle.style.color = m.headerColor; headerTitle.style.textShadow = '2px 2px 0 ' + m.border; }
         if (promptCard)  { promptCard.style.borderColor = m.border; }
@@ -397,10 +492,10 @@
         msgText.textContent  = m.text;
         msgTip.innerHTML     = m.tip;
         messageBox.style.borderColor = m.border;
-        messageBox.style.display   = 'block';
-        messageBox.style.animation = 'none';
+        messageBox.style.display     = 'block';
+        messageBox.style.animation   = 'none';
         void messageBox.offsetWidth;
-        messageBox.style.animation = 'popIn 0.4s ease';
+        messageBox.style.animation   = 'popIn 0.4s ease';
         var allBtns = document.querySelectorAll('.mood-btn');
         allBtns.forEach(function(btn) { btn.classList.remove('selected'); btn.style.opacity = '0.6'; });
         var active = document.getElementById('btn' + moodKey.charAt(0).toUpperCase() + moodKey.slice(1));
@@ -421,92 +516,182 @@
 
       var allMoodBtns = document.querySelectorAll('.mood-btn');
       allMoodBtns.forEach(function(btn, i) {
-        btn.style.opacity   = '0';
-        btn.style.transform = 'translateY(20px)';
+        btn.style.opacity    = '0';
+        btn.style.transform  = 'translateY(20px)';
         btn.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
         setTimeout(function() { btn.style.opacity = '1'; btn.style.transform = 'translateY(0)'; }, 200 + i * 120);
       });
 
       /* =====================================================
-         SPACE QUIZ LOGIC
+         ANIMAL QUIZ LOGIC
       ===================================================== */
 
-      // All quiz questions — easy to add more!
-      var questions = [
-        {
-          question: '🪐 Which planet in our solar system has the most rings?',
-          answers:  ['Jupiter', 'Saturn', 'Uranus', 'Neptune'],
-          correct:  1,  // index of correct answer (Saturn)
-          funFact:  'Saturn has over 80 moons AND thousands of rings made of ice and rock chunks! 🪐'
-        },
-        {
-          question: '🌙 About how long does it take for the Moon to travel once around the Earth?',
-          answers:  ['1 week', '1 month', '6 months', '1 year'],
-          correct:  1,  // 1 month
-          funFact:  'The Moon orbits Earth in about 27 days — that\'s why we see different phases of the Moon each month! 🌕'
-        },
-        {
-          question: '⭐ What is the name of the galaxy that contains our Solar System?',
-          answers:  ['Andromeda', 'Sombrero', 'Milky Way', 'Whirlpool'],
-          correct:  2,  // Milky Way
-          funFact:  'The Milky Way has between 100 and 400 BILLION stars — and our Sun is just one of them! 🌌'
-        }
-      ];
+      // All questions grouped by category — easy to add more!
+      var allQuestions = {
+        mammals: [
+          {
+            question: '🦁 Which mammal is the tallest animal on Earth?',
+            answers: ['Elephant', 'Giraffe', 'Horse', 'Polar Bear'],
+            correct: 1,
+            funFact: 'Giraffes can grow up to 6 metres tall! Their long necks help them reach leaves high up in trees. 🌿'
+          },
+          {
+            question: '🐘 How long is a typical elephant pregnancy?',
+            answers: ['3 months', '6 months', '12 months', '22 months'],
+            correct: 3,
+            funFact: 'Elephants have the longest pregnancy of any land mammal — nearly 2 years! Baby elephants are born weighing about 100 kg. 🐘'
+          },
+          {
+            question: '🦇 Which is the ONLY mammal that can truly fly?',
+            answers: ['Flying Squirrel', 'Bat', 'Flying Lemur', 'Sugar Glider'],
+            correct: 1,
+            funFact: 'Bats are the only mammals with wings for true powered flight. There are over 1,400 species of bat! 🦇'
+          }
+        ],
+        ocean: [
+          {
+            question: '🐬 What is the largest animal ever known to have lived on Earth?',
+            answers: ['Great White Shark', 'Sperm Whale', 'Blue Whale', 'Giant Squid'],
+            correct: 2,
+            funFact: 'The Blue Whale can grow up to 30 metres long and weigh 200 tonnes — bigger than any dinosaur! 🐋'
+          },
+          {
+            question: '🦑 How many hearts does an octopus have?',
+            answers: ['1', '2', '3', '4'],
+            correct: 2,
+            funFact: 'Octopuses have THREE hearts! Two pump blood to the gills and one pumps it to the rest of the body. They also have blue blood! 💙'
+          },
+          {
+            question: '🦈 Which ocean animal can detect electric fields made by other animals?',
+            answers: ['Dolphin', 'Shark', 'Crab', 'Jellyfish'],
+            correct: 1,
+            funFact: 'Sharks have special organs called "ampullae of Lorenzini" that sense tiny electric fields — like a living metal detector! ⚡'
+          }
+        ],
+        insects: [
+          {
+            question: '🦋 How many wings does a butterfly have?',
+            answers: ['2', '4', '6', '8'],
+            correct: 1,
+            funFact: 'Butterflies have 4 wings — two forewings and two hindwings. The wings are covered in tiny overlapping scales! 🌈'
+          },
+          {
+            question: '🐝 About how many bees does it take to make one jar of honey?',
+            answers: ['10 bees', '100 bees', '1,000 bees', 'Over 10,000 bees'],
+            correct: 3,
+            funFact: 'It takes over 10,000 bees working together their entire lives to make just one jar of honey. Bees visit up to 2 million flowers for a single jar! 🍯'
+          },
+          {
+            question: '🪲 Which insect can lift up to 50 times its own body weight?',
+            answers: ['Grasshopper', 'Beetle', 'Ant', 'Dragonfly'],
+            correct: 2,
+            funFact: 'Ants are incredible! Leafcutter ants can carry 50 times their body weight. That would be like a human carrying a truck! 🏋️'
+          }
+        ],
+        birds: [
+          {
+            question: '🦅 Which bird has the largest wingspan of any living bird?',
+            answers: ['Bald Eagle', 'Wandering Albatross', 'Pelican', 'Condor'],
+            correct: 1,
+            funFact: 'The Wandering Albatross has a wingspan of up to 3.5 metres — wider than a small car! They can fly for years without landing. 🌊'
+          },
+          {
+            question: '🐧 Which bird can swim but cannot fly?',
+            answers: ['Ostrich', 'Penguin', 'Kiwi', 'Emu'],
+            correct: 1,
+            funFact: 'Penguins are brilliant swimmers! Their wings evolved into flippers, letting them "fly" through the water at up to 25 km/h. 🧊'
+          },
+          {
+            question: '🦜 Which bird is known for being able to mimic human speech?',
+            answers: ['Toucan', 'Flamingo', 'Parrot', 'Hummingbird'],
+            correct: 2,
+            funFact: 'Parrots learn to mimic sounds including human speech! The African Grey Parrot can learn hundreds of words and even understand context. 🗣️'
+          }
+        ]
+      };
 
-      // Quiz state variables
-      var currentQ  = 0;   // which question we're on
-      var score     = 0;   // how many correct
-      var answered  = false; // has the user answered the current question?
+      // Category display names and badges
+      var catInfo = {
+        mammals: { label: '🦁 Mammals', color: '#388e3c' },
+        ocean:   { label: '🐬 Ocean',   color: '#0277bd' },
+        insects: { label: '🦋 Insects', color: '#7b1fa2' },
+        birds:   { label: '🦅 Birds',   color: '#f57f17' }
+      };
 
-      // Grab quiz screen elements
+      // Quiz state
+      var currentQ     = 0;
+      var score        = 0;
+      var answered     = false;
+      var selectedCat  = 'mammals';
+      var questions    = allQuestions[selectedCat]; // active question set
+      var userAnswers  = []; // track what user picked for review
+
+      // Grab DOM elements
       var quizStart    = document.getElementById('quizStart');
       var quizQuestion = document.getElementById('quizQuestion');
       var quizScore    = document.getElementById('quizScore');
       var qProgress    = document.getElementById('qProgress');
+      var progressFill = document.getElementById('progressFill');
+      var qCatBadge    = document.getElementById('qCatBadge');
       var qText        = document.getElementById('qText');
       var answersGrid  = document.getElementById('answersGrid');
       var feedbackBar  = document.getElementById('feedbackBar');
       var nextBtn      = document.getElementById('nextBtn');
       var startQuizBtn = document.getElementById('startQuizBtn');
       var playAgainBtn = document.getElementById('playAgainBtn');
+      var changeCatBtn = document.getElementById('changeCatBtn');
       var scoreNum     = document.getElementById('scoreNum');
       var scoreMsg     = document.getElementById('scoreMsg');
       var scoreEmoji   = document.getElementById('scoreEmoji');
+      var reviewList   = document.getElementById('reviewList');
 
-      // Show a specific screen, hide others
+      // Handle category pill clicks
+      var catPills = document.querySelectorAll('.cat-pill');
+      catPills.forEach(function(pill) {
+        pill.addEventListener('click', function() {
+          catPills.forEach(function(p) { p.classList.remove('active'); });
+          pill.classList.add('active');
+          selectedCat = pill.getAttribute('data-cat');
+        });
+      });
+
+      // Show one quiz screen at a time
       function showScreen(name) {
         quizStart.style.display    = (name === 'start')    ? 'block' : 'none';
         quizQuestion.style.display = (name === 'question') ? 'block' : 'none';
         quizScore.style.display    = (name === 'score')    ? 'block' : 'none';
       }
 
-      // Load and display the current question
+      // Load current question onto the screen
       function loadQuestion() {
         answered = false;
         var q = questions[currentQ];
+        var total = questions.length;
+        var letters = ['A', 'B', 'C', 'D'];
 
-        // Update progress text
-        qProgress.textContent = 'Question ' + (currentQ + 1) + ' of ' + questions.length;
+        // Progress text and bar
+        qProgress.textContent = 'Question ' + (currentQ + 1) + ' of ' + total;
+        progressFill.style.width = (currentQ / total * 100) + '%';
 
-        // Set question text
+        // Category badge
+        qCatBadge.textContent = catInfo[selectedCat].label;
+
+        // Question text
         qText.textContent = q.question;
 
-        // Clear old answers and feedback
-        answersGrid.innerHTML = '';
+        // Clear previous answers + feedback
+        answersGrid.innerHTML     = '';
         feedbackBar.style.display = 'none';
         feedbackBar.className     = '';
         nextBtn.style.display     = 'none';
 
-        // Build answer buttons dynamically
+        // Build answer buttons
         q.answers.forEach(function(answerText, index) {
           var btn = document.createElement('button');
-          btn.className   = 'ans-btn';
-          btn.textContent = answerText;
-          // When clicked, check the answer
+          btn.className = 'ans-btn';
+          btn.innerHTML = '<span class="ans-letter">' + letters[index] + '</span>' + answerText;
           btn.addEventListener('click', function() {
-            if (!answered) {
-              checkAnswer(index);
-            }
+            if (!answered) { checkAnswer(index); }
           });
           answersGrid.appendChild(btn);
         });
@@ -514,70 +699,90 @@
         showScreen('question');
       }
 
-      // Check if the chosen answer is correct
+      // Check chosen answer, show feedback
       function checkAnswer(chosenIndex) {
         answered = true;
-        var q       = questions[currentQ];
-        var allAns  = answersGrid.querySelectorAll('.ans-btn');
+        var q      = questions[currentQ];
+        var allAns = answersGrid.querySelectorAll('.ans-btn');
 
-        // Disable all buttons so they can't click again
+        // Save user's choice for review screen
+        userAnswers[currentQ] = chosenIndex;
+
+        // Disable all answer buttons
         allAns.forEach(function(btn) { btn.disabled = true; });
 
-        // Highlight correct and wrong
+        // Mark correct and wrong
         allAns[q.correct].classList.add('correct');
         if (chosenIndex !== q.correct) {
           allAns[chosenIndex].classList.add('wrong');
+        } else {
+          score++;
         }
 
-        // Show feedback bar
-        feedbackBar.style.display = 'block';
+        // Animate and show feedback bar
+        feedbackBar.style.display   = 'block';
         feedbackBar.style.animation = 'none';
         void feedbackBar.offsetWidth;
         feedbackBar.style.animation = 'popIn 0.3s ease';
 
         if (chosenIndex === q.correct) {
-          score++;
-          feedbackBar.className   = 'correct-fb';
-          feedbackBar.innerHTML   = '✅ <strong>Correct!</strong> ' + q.funFact;
+          feedbackBar.className = 'correct-fb';
+          feedbackBar.innerHTML = '✅ <strong>Correct!</strong> ' + q.funFact;
         } else {
-          feedbackBar.className   = 'wrong-fb';
-          feedbackBar.innerHTML   = '❌ <strong>Not quite!</strong> The answer is <strong>' +
-                                    q.answers[q.correct] + '</strong>. ' + q.funFact;
+          feedbackBar.className = 'wrong-fb';
+          feedbackBar.innerHTML = '❌ <strong>Not quite!</strong> The right answer is <strong>' +
+                                  q.answers[q.correct] + '</strong>. ' + q.funFact;
         }
 
-        // Show the Next / Finish button
+        // Update next button text
         nextBtn.style.display = 'block';
-        if (currentQ === questions.length - 1) {
-          nextBtn.textContent = '🏁 See My Score!';
-        } else {
-          nextBtn.textContent = 'Next Question ➡️';
-        }
+        nextBtn.textContent = (currentQ === questions.length - 1) ? '🏁 See My Score!' : 'Next Question ➡️';
       }
 
-      // Show the final score screen
+      // Build and show the final score screen
       function showFinalScore() {
         var total = questions.length;
+        progressFill.style.width = '100%';
         scoreNum.textContent = score + ' / ' + total;
 
-        // Pick an emoji and message based on score
+        // Pick emoji and message
         if (score === total) {
           scoreEmoji.textContent = '🏆';
-          scoreMsg.textContent   = 'Perfect score! You\'re a true space expert! The universe needs a brilliant mind like yours! 🌌✨';
-        } else if (score >= total - 1) {
+          scoreMsg.textContent   = 'PERFECT SCORE! You\'re an animal expert! Every creature in the kingdom bows to you! 🌿✨';
+        } else if (score === total - 1) {
           scoreEmoji.textContent = '🌟';
-          scoreMsg.textContent   = 'So close to perfect! You really know your space facts. Keep stargazing! 🔭';
+          scoreMsg.textContent   = 'So close to perfect! You really know your animals. One more study session and you\'ll nail it! 🔍';
+        } else if (score === 1) {
+          scoreEmoji.textContent = '🐾';
+          scoreMsg.textContent   = 'Good start, wildlife explorer! Every expert began as a beginner. Try again and beat your score! 💪';
         } else {
-          scoreEmoji.textContent = '🚀';
-          scoreMsg.textContent   = 'Nice try, space cadet! Every astronaut needs practice. Play again to blast off to a higher score! 💫';
+          scoreEmoji.textContent = '🦁';
+          scoreMsg.textContent   = 'Nice work! You\'re learning lots about animals. Play again to go even higher! 🚀';
         }
+
+        // Build review list
+        reviewList.innerHTML = '';
+        questions.forEach(function(q, i) {
+          var item = document.createElement('div');
+          var correct = (userAnswers[i] === q.correct);
+          item.className = 'review-item ' + (correct ? 'ri-correct' : 'ri-wrong');
+          item.innerHTML =
+            '<div class="ri-q">' + (correct ? '✅' : '❌') + ' Q' + (i+1) + ': ' + q.question + '</div>' +
+            '<div>Your answer: <strong>' + (userAnswers[i] !== undefined ? q.answers[userAnswers[i]] : '—') + '</strong>' +
+            (correct ? '' : ' &nbsp;✔ Correct: <strong>' + q.answers[q.correct] + '</strong>') + '</div>';
+          reviewList.appendChild(item);
+        });
+
         showScreen('score');
       }
 
-      // Reset quiz state and go back to start (or jump straight into questions)
+      // Reset and start quiz with current category
       function resetQuiz() {
-        currentQ = 0;
-        score    = 0;
-        answered = false;
+        currentQ    = 0;
+        score       = 0;
+        answered    = false;
+        userAnswers = [];
+        questions   = allQuestions[selectedCat];
         loadQuestion();
       }
 
@@ -599,13 +804,18 @@
         resetQuiz();
       });
 
-      // Start by showing only the start screen
+      if (changeCatBtn) changeCatBtn.addEventListener('click', function() {
+        showScreen('start');
+      });
+
+      // Show the start screen first
       showScreen('start');
 
       // BUTTON CHECKLIST:
       // #btnHappy ✓  #btnTired ✓  #btnExcited ✓  #btnWorried ✓
-      // #startQuizBtn ✓  #nextBtn ✓  #playAgainBtn ✓
-      // Answer buttons are created dynamically and each gets addEventListener ✓
+      // #startQuizBtn ✓  #nextBtn ✓  #playAgainBtn ✓  #changeCatBtn ✓
+      // .cat-pill buttons (forEach) ✓
+      // Answer buttons created dynamically with addEventListener ✓
     });
   </script>
 
