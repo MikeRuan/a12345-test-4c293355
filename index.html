@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Mood Tracker 🌈</title>
+  <title>My Mood Tracker 🌈 & Space Quiz 🚀</title>
   <style>
-    /* === GENERAL PAGE STYLES === */
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
       min-height: 100vh;
       padding: 24px 16px;
-      /* Default background — changes when a mood is picked */
       background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
       transition: background 0.7s ease;
     }
@@ -28,22 +26,9 @@
       border: 4px solid #b2ebf2;
       transition: border-color 0.7s ease;
     }
-
     .header .emoji-row { font-size: 2.6rem; letter-spacing: 8px; margin-bottom: 8px; }
-
-    .header h1 {
-      font-size: 2.4rem;
-      color: #00838f;
-      text-shadow: 2px 2px 0 #b2ebf2;
-      line-height: 1.2;
-      transition: color 0.7s ease;
-    }
-
-    .header .subtitle {
-      font-size: 1.1rem;
-      color: #777;
-      margin-top: 6px;
-    }
+    .header h1 { font-size: 2.4rem; color: #00838f; text-shadow: 2px 2px 0 #b2ebf2; line-height: 1.2; transition: color 0.7s ease; }
+    .header .subtitle { font-size: 1.1rem; color: #777; margin-top: 6px; }
 
     /* === PROMPT CARD === */
     .prompt-card {
@@ -56,14 +41,9 @@
       border: 3px dashed #b2ebf2;
       transition: border-color 0.7s ease;
     }
+    .prompt-card p { font-size: 1.4rem; color: #444; line-height: 1.6; }
 
-    .prompt-card p {
-      font-size: 1.4rem;
-      color: #444;
-      line-height: 1.6;
-    }
-
-    /* === MOOD BUTTONS GRID === */
+    /* === MOOD GRID === */
     .mood-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -71,11 +51,9 @@
       max-width: 560px;
       margin: 0 auto 30px auto;
     }
-
-    /* Each big mood button */
     .mood-btn {
       background: #fff;
-      border: none;
+      border: 5px solid transparent;
       border-radius: 28px;
       padding: 30px 16px 24px;
       cursor: pointer;
@@ -84,44 +62,20 @@
       flex-direction: column;
       align-items: center;
       gap: 12px;
-      transition: transform 0.18s, box-shadow 0.18s, border 0.2s;
-      border: 5px solid transparent;
+      transition: transform 0.18s, box-shadow 0.18s;
       font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
     }
-
-    .mood-btn:hover {
-      transform: translateY(-6px) scale(1.04);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.16);
-    }
-
-    /* Each button has a coloured top border to hint at the mood */
-    .mood-btn.happy  { border-top-color: #ffd600; }
-    .mood-btn.tired  { border-top-color: #7c9fbd; }
+    .mood-btn:hover { transform: translateY(-6px) scale(1.04); box-shadow: 0 12px 28px rgba(0,0,0,0.16); }
+    .mood-btn.happy   { border-top-color: #ffd600; }
+    .mood-btn.tired   { border-top-color: #7c9fbd; }
     .mood-btn.excited { border-top-color: #ff7043; }
     .mood-btn.worried { border-top-color: #8d6e9e; }
-
-    /* Active/selected state — glows when clicked */
-    .mood-btn.selected {
-      transform: translateY(-4px) scale(1.06);
-      box-shadow: 0 0 0 5px rgba(0,0,0,0.12), 0 10px 28px rgba(0,0,0,0.18);
-    }
-
+    .mood-btn.selected { transform: translateY(-4px) scale(1.06); box-shadow: 0 0 0 5px rgba(0,0,0,0.12), 0 10px 28px rgba(0,0,0,0.18); }
     .mood-btn .mood-emoji { font-size: 3.6rem; line-height: 1; }
+    .mood-btn .mood-label { font-size: 1.4rem; font-weight: bold; color: #333; }
+    .mood-btn .mood-hint  { font-size: 0.95rem; color: #888; text-align: center; line-height: 1.4; }
 
-    .mood-btn .mood-label {
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: #333;
-    }
-
-    .mood-btn .mood-hint {
-      font-size: 0.95rem;
-      color: #888;
-      text-align: center;
-      line-height: 1.4;
-    }
-
-    /* === MESSAGE BOX (hidden at start) === */
+    /* === MESSAGE BOX === */
     .message-box {
       max-width: 560px;
       margin: 0 auto 28px auto;
@@ -131,43 +85,143 @@
       text-align: center;
       box-shadow: 0 6px 24px rgba(0,0,0,0.13);
       border: 4px solid #ccc;
-      display: none;         /* hidden until a mood is clicked */
+      display: none;
       transition: border-color 0.5s ease;
       animation: popIn 0.4s ease;
     }
-
-    /* Smooth pop-in animation for the message */
     @keyframes popIn {
       0%   { transform: scale(0.85); opacity: 0; }
       70%  { transform: scale(1.04); opacity: 1; }
       100% { transform: scale(1);    opacity: 1; }
     }
-
-    .message-box .msg-emoji { font-size: 4rem; margin-bottom: 12px; }
-
-    .message-box .msg-title {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-      color: #333;
-    }
-
-    .message-box .msg-text {
-      font-size: 1.15rem;
-      color: #555;
-      line-height: 1.75;
-    }
-
-    .message-box .msg-tip {
-      margin-top: 16px;
-      background: #f5f5f5;
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-size: 1.05rem;
-      color: #444;
-      line-height: 1.6;
-    }
-
+    .message-box .msg-emoji  { font-size: 4rem; margin-bottom: 12px; }
+    .message-box .msg-title  { font-size: 1.8rem; margin-bottom: 10px; color: #333; }
+    .message-box .msg-text   { font-size: 1.15rem; color: #555; line-height: 1.75; }
+    .message-box .msg-tip    { margin-top: 16px; background: #f5f5f5; border-radius: 14px; padding: 12px 16px; font-size: 1.05rem; color: #444; line-height: 1.6; }
     .message-box .msg-tip strong { color: #00838f; }
+
+    /* === DIVIDER === */
+    .section-divider {
+      max-width: 560px;
+      margin: 10px auto 30px auto;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #999;
+      letter-spacing: 6px;
+    }
+
+    /* === QUIZ WRAPPER === */
+    #quizSection {
+      max-width: 560px;
+      margin: 0 auto 40px auto;
+    }
+
+    /* Start Screen */
+    #quizStart {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      border-radius: 30px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      color: #fff;
+    }
+    #quizStart .quiz-star-row { font-size: 2.4rem; margin-bottom: 10px; }
+    #quizStart h2 { font-size: 2rem; margin-bottom: 10px; text-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
+    #quizStart p  { font-size: 1.1rem; opacity: 0.88; line-height: 1.7; margin-bottom: 24px; }
+
+    /* Big action buttons (Start, Next, Play Again) */
+    .big-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #ffd600, #ffab00);
+      color: #1a237e;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+      font-size: 1.4rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 44px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .big-btn:hover { transform: scale(1.06); box-shadow: 0 10px 26px rgba(0,0,0,0.28); }
+
+    /* Question Card */
+    #quizQuestion { display: none; }
+    .q-card {
+      background: #fff;
+      border-radius: 26px;
+      padding: 28px 24px 24px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.14);
+      border: 4px solid #7986cb;
+      animation: popIn 0.4s ease;
+    }
+    .q-progress {
+      font-size: 1rem;
+      color: #7986cb;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .q-text {
+      font-size: 1.35rem;
+      color: #1a237e;
+      margin-bottom: 22px;
+      line-height: 1.55;
+    }
+
+    /* Answer buttons */
+    .answers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+    .ans-btn {
+      background: #e8eaf6;
+      border: 3px solid #7986cb;
+      border-radius: 18px;
+      padding: 15px 18px;
+      font-size: 1.15rem;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+      color: #283593;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.13s, background 0.18s;
+    }
+    .ans-btn:hover:not(:disabled) { transform: scale(1.02); background: #c5cae9; }
+    .ans-btn.correct  { background: #c8e6c9 !important; border-color: #388e3c !important; color: #1b5e20 !important; }
+    .ans-btn.wrong    { background: #ffcdd2 !important; border-color: #c62828 !important; color: #b71c1c !important; }
+    .ans-btn:disabled { cursor: default; }
+
+    /* Feedback bar */
+    #feedbackBar {
+      margin-top: 18px;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 1.1rem;
+      line-height: 1.55;
+      display: none;
+      animation: popIn 0.3s ease;
+    }
+    #feedbackBar.correct-fb { background: #e8f5e9; border: 3px solid #388e3c; color: #1b5e20; }
+    #feedbackBar.wrong-fb   { background: #ffebee; border: 3px solid #c62828; color: #b71c1c; }
+
+    #nextBtn { margin-top: 18px; display: none; }
+
+    /* Score Screen */
+    #quizScore { display: none; }
+    .score-card {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      border-radius: 30px;
+      padding: 36px 28px;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      animation: popIn 0.5s ease;
+    }
+    .score-card .score-emoji { font-size: 4.5rem; margin-bottom: 10px; }
+    .score-card h2 { font-size: 2rem; margin-bottom: 8px; }
+    .score-card .score-num { font-size: 3.5rem; font-weight: bold; color: #ffd600; margin: 10px 0; text-shadow: 2px 2px 0 rgba(0,0,0,0.25); }
+    .score-card .score-msg { font-size: 1.15rem; opacity: 0.9; line-height: 1.65; margin-bottom: 26px; }
 
     /* === FOOTER === */
     footer {
@@ -179,79 +233,112 @@
       margin: 0 auto;
     }
 
-    /* === MOBILE TWEAKS === */
     @media (max-width: 420px) {
       .header h1   { font-size: 1.8rem; }
       .mood-btn    { padding: 22px 10px 18px; }
       .mood-btn .mood-emoji { font-size: 2.8rem; }
       .mood-btn .mood-label { font-size: 1.2rem; }
+      .q-text { font-size: 1.15rem; }
+      .ans-btn { font-size: 1rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ===== HEADER ===== -->
+  <!-- ===== MOOD TRACKER SECTION ===== -->
   <div class="header" id="mainHeader">
     <div class="emoji-row">🌈 💛 🌈</div>
     <h1 id="headerTitle">My Mood Tracker</h1>
     <p class="subtitle">How are you feeling right now? It's okay to feel anything! 🌟</p>
   </div>
 
-  <!-- ===== PROMPT ===== -->
   <div class="prompt-card" id="promptCard">
     <p>👇 Tap the face that matches how you feel today!</p>
   </div>
 
-  <!-- ===== FOUR MOOD BUTTONS ===== -->
   <div class="mood-grid">
-
-    <!-- Happy -->
-    <button class="mood-btn happy" id="btnHappy">
+    <button class="mood-btn happy"   id="btnHappy">
       <span class="mood-emoji">😄</span>
       <span class="mood-label">Happy</span>
       <span class="mood-hint">Joyful &amp; smiling</span>
     </button>
-
-    <!-- Tired -->
-    <button class="mood-btn tired" id="btnTired">
+    <button class="mood-btn tired"   id="btnTired">
       <span class="mood-emoji">😴</span>
       <span class="mood-label">Tired</span>
       <span class="mood-hint">Sleepy &amp; low energy</span>
     </button>
-
-    <!-- Excited -->
     <button class="mood-btn excited" id="btnExcited">
       <span class="mood-emoji">🤩</span>
       <span class="mood-label">Excited</span>
       <span class="mood-hint">Buzzing with energy!</span>
     </button>
-
-    <!-- Worried -->
     <button class="mood-btn worried" id="btnWorried">
       <span class="mood-emoji">😟</span>
       <span class="mood-label">Worried</span>
       <span class="mood-hint">Nervous or anxious</span>
     </button>
-
   </div>
 
-  <!-- ===== MESSAGE BOX (shown after clicking a mood) ===== -->
   <div class="message-box" id="messageBox">
     <div class="msg-emoji" id="msgEmoji">😄</div>
     <div class="msg-title" id="msgTitle">You're feeling Happy!</div>
-    <div class="msg-text" id="msgText">That's wonderful!</div>
-    <div class="msg-tip"  id="msgTip">Try something fun today!</div>
+    <div class="msg-text"  id="msgText">That's wonderful!</div>
+    <div class="msg-tip"   id="msgTip">Try something fun today!</div>
   </div>
+
+  <!-- ===== DIVIDER ===== -->
+  <div class="section-divider">· · · 🚀 · · ·</div>
+
+  <!-- ===== SPACE QUIZ SECTION ===== -->
+  <div id="quizSection">
+
+    <!-- START SCREEN -->
+    <div id="quizStart">
+      <div class="quiz-star-row">🌟 🪐 🌟</div>
+      <h2>Space Quiz Challenge!</h2>
+      <p>Think you know your planets, stars, and galaxies? Test your knowledge with 3 awesome space questions! 👩‍🚀</p>
+      <button class="big-btn" id="startQuizBtn">🚀 Start Quiz!</button>
+    </div>
+
+    <!-- QUESTION SCREEN -->
+    <div id="quizQuestion">
+      <div class="q-card">
+        <div class="q-progress" id="qProgress">Question 1 of 3</div>
+        <div class="q-text"     id="qText">Question goes here</div>
+        <div class="answers-grid" id="answersGrid">
+          <!-- Answer buttons injected by JS -->
+        </div>
+        <div id="feedbackBar"></div>
+        <div style="text-align:center;">
+          <button class="big-btn" id="nextBtn">Next Question ➡️</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCORE SCREEN -->
+    <div id="quizScore">
+      <div class="score-card">
+        <div class="score-emoji" id="scoreEmoji">🏆</div>
+        <h2>Quiz Complete!</h2>
+        <div class="score-num"  id="scoreNum">0 / 3</div>
+        <div class="score-msg"  id="scoreMsg">Great job!</div>
+        <button class="big-btn" id="playAgainBtn">🔄 Play Again</button>
+      </div>
+    </div>
+
+  </div><!-- end #quizSection -->
 
   <!-- ===== FOOTER ===== -->
   <footer>
-    All feelings are valid 💛 &nbsp;|&nbsp; Remember: you are never alone 🤝
+    All feelings are valid 💛 &nbsp;|&nbsp; Keep exploring the universe 🚀
   </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-      // ---- Grab all the elements we'll need ----
+      /* =====================================================
+         MOOD TRACKER LOGIC
+      ===================================================== */
       var body        = document.body;
       var mainHeader  = document.getElementById('mainHeader');
       var headerTitle = document.getElementById('headerTitle');
@@ -267,130 +354,258 @@
       var btnExcited = document.getElementById('btnExcited');
       var btnWorried = document.getElementById('btnWorried');
 
-      // ---- Data for each mood ----
-      // Each entry has: bg color, border accent, emoji, title, message, tip
       var moods = {
         happy: {
-          bg:       'linear-gradient(135deg, #fffde7 0%, #fff9c4 100%)',
-          border:   '#ffd600',
-          headerColor: '#f9a825',
-          emoji:    '😄',
-          title:    'You\'re feeling Happy! 🌟',
-          text:     'That\'s amazing! Happiness is a wonderful feeling. You might be smiling a lot today — and that\'s totally contagious! 😊',
-          tip:      '💡 <strong>Try this:</strong> Share your good mood! Say something kind to a friend or draw a happy picture to brighten someone\'s day.'
+          bg: 'linear-gradient(135deg, #fffde7 0%, #fff9c4 100%)',
+          border: '#ffd600', headerColor: '#f9a825',
+          emoji: '😄', title: 'You\'re feeling Happy! 🌟',
+          text: 'That\'s amazing! Happiness is a wonderful feeling. You might be smiling a lot today — and that\'s totally contagious! 😊',
+          tip: '💡 <strong>Try this:</strong> Share your good mood! Say something kind to a friend or draw a happy picture to brighten someone\'s day.'
         },
         tired: {
-          bg:       'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)',
-          border:   '#7c9fbd',
-          headerColor: '#1565c0',
-          emoji:    '😴',
-          title:    'You\'re feeling Tired 💤',
-          text:     'It\'s okay to feel tired! Your body and brain work really hard every day. Being tired just means you need a little rest — that\'s totally normal.',
-          tip:      '💡 <strong>Try this:</strong> Take three slow, deep breaths. Have a small snack, drink some water, or find a quiet spot to relax for a few minutes.'
+          bg: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)',
+          border: '#7c9fbd', headerColor: '#1565c0',
+          emoji: '😴', title: 'You\'re feeling Tired 💤',
+          text: 'It\'s okay to feel tired! Your body and brain work really hard every day. Being tired just means you need a little rest — that\'s totally normal.',
+          tip: '💡 <strong>Try this:</strong> Take three slow, deep breaths. Have a small snack, drink some water, or find a quiet spot to relax for a few minutes.'
         },
         excited: {
-          bg:       'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)',
-          border:   '#ff7043',
-          headerColor: '#e64a19',
-          emoji:    '🤩',
-          title:    'You\'re feeling Excited! 🎉',
-          text:     'Wow, you\'ve got lots of energy right now! Excitement means something great is happening — or you\'re looking forward to something awesome. Enjoy that spark! ⚡',
-          tip:      '💡 <strong>Try this:</strong> Write down what you\'re excited about, or tell a friend! Sharing excitement makes it even more fun. 🚀'
+          bg: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)',
+          border: '#ff7043', headerColor: '#e64a19',
+          emoji: '🤩', title: 'You\'re feeling Excited! 🎉',
+          text: 'Wow, you\'ve got lots of energy right now! Excitement means something great is happening — or you\'re looking forward to something awesome. Enjoy that spark! ⚡',
+          tip: '💡 <strong>Try this:</strong> Write down what you\'re excited about, or tell a friend! Sharing excitement makes it even more fun. 🚀'
         },
         worried: {
-          bg:       'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)',
-          border:   '#8d6e9e',
-          headerColor: '#6a1b9a',
-          emoji:    '😟',
-          title:    'You\'re feeling Worried 💜',
-          text:     'It\'s completely okay to feel worried — everyone does sometimes. Worries can feel big, but you don\'t have to face them alone. You are safe, and things will be okay. 🌷',
-          tip:      '💡 <strong>Try this:</strong> Talk to a trusted grown-up, like a teacher or a parent. Or try this: breathe in for 4 counts, hold for 4, breathe out for 4. 🧘'
+          bg: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)',
+          border: '#8d6e9e', headerColor: '#6a1b9a',
+          emoji: '😟', title: 'You\'re feeling Worried 💜',
+          text: 'It\'s completely okay to feel worried — everyone does sometimes. Worries can feel big, but you don\'t have to face them alone. You are safe, and things will be okay. 🌷',
+          tip: '💡 <strong>Try this:</strong> Talk to a trusted grown-up, like a teacher or a parent. Or try this: breathe in for 4 counts, hold for 4, breathe out for 4. 🧘'
         }
       };
 
-      // ---- Function that updates the whole page for a mood ----
       function showMood(moodKey) {
         var m = moods[moodKey];
-
-        // 1. Change the page background colour
         body.style.background = m.bg;
-        body.style.transition  = 'background 0.7s ease';
-
-        // 2. Update header border & title colour
-        if (mainHeader) {
-          mainHeader.style.borderColor = m.border;
-          mainHeader.style.transition  = 'border-color 0.7s ease';
-        }
-        if (headerTitle) {
-          headerTitle.style.color      = m.headerColor;
-          headerTitle.style.textShadow = '2px 2px 0 ' + m.border;
-        }
-
-        // 3. Update prompt card border
-        if (promptCard) {
-          promptCard.style.borderColor = m.border;
-        }
-
-        // 4. Fill in the message box
-        msgEmoji.textContent    = m.emoji;
-        msgTitle.textContent    = m.title;
-        msgText.textContent     = m.text;
-        msgTip.innerHTML        = m.tip;   // innerHTML so <strong> works
+        body.style.transition = 'background 0.7s ease';
+        if (mainHeader) { mainHeader.style.borderColor = m.border; }
+        if (headerTitle) { headerTitle.style.color = m.headerColor; headerTitle.style.textShadow = '2px 2px 0 ' + m.border; }
+        if (promptCard)  { promptCard.style.borderColor = m.border; }
+        msgEmoji.textContent = m.emoji;
+        msgTitle.textContent = m.title;
+        msgText.textContent  = m.text;
+        msgTip.innerHTML     = m.tip;
         messageBox.style.borderColor = m.border;
-
-        // 5. Show the message box with a fresh animation
         messageBox.style.display   = 'block';
-        // Re-trigger the pop-in animation by removing & re-adding it
         messageBox.style.animation = 'none';
-        // Force browser to notice the change before re-applying
         void messageBox.offsetWidth;
         messageBox.style.animation = 'popIn 0.4s ease';
-
-        // 6. Highlight the selected button, de-select the others
         var allBtns = document.querySelectorAll('.mood-btn');
-        allBtns.forEach(function(btn) {
-          btn.classList.remove('selected');
-          btn.style.opacity = '0.6';
-        });
+        allBtns.forEach(function(btn) { btn.classList.remove('selected'); btn.style.opacity = '0.6'; });
         var active = document.getElementById('btn' + moodKey.charAt(0).toUpperCase() + moodKey.slice(1));
-        if (active) {
-          active.classList.add('selected');
-          active.style.opacity   = '1';
-          active.style.borderColor = m.border;
-        }
-
-        // 7. Smooth-scroll to the message box
+        if (active) { active.classList.add('selected'); active.style.opacity = '1'; active.style.borderColor = m.border; }
         messageBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
 
-      // ---- Attach click listeners to each mood button ----
       if (btnHappy)   btnHappy.addEventListener('click',   function() { showMood('happy');   });
       if (btnTired)   btnTired.addEventListener('click',   function() { showMood('tired');   });
       if (btnExcited) btnExcited.addEventListener('click', function() { showMood('excited'); });
       if (btnWorried) btnWorried.addEventListener('click', function() { showMood('worried'); });
 
-      // ---- Gentle bounce-in for the header on load ----
       if (mainHeader) {
         mainHeader.style.transform  = 'scale(0.95)';
         mainHeader.style.transition = 'transform 0.45s ease';
-        setTimeout(function() {
-          mainHeader.style.transform = 'scale(1)';
-        }, 80);
+        setTimeout(function() { mainHeader.style.transform = 'scale(1)'; }, 80);
       }
 
-      // ---- Stagger-animate the mood buttons on load ----
-      var allBtns = document.querySelectorAll('.mood-btn');
-      allBtns.forEach(function(btn, i) {
+      var allMoodBtns = document.querySelectorAll('.mood-btn');
+      allMoodBtns.forEach(function(btn, i) {
         btn.style.opacity   = '0';
         btn.style.transform = 'translateY(20px)';
         btn.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-        setTimeout(function() {
-          btn.style.opacity   = '1';
-          btn.style.transform = 'translateY(0)';
-        }, 200 + i * 120);
+        setTimeout(function() { btn.style.opacity = '1'; btn.style.transform = 'translateY(0)'; }, 200 + i * 120);
       });
 
-      // BUTTON CHECKLIST: #btnHappy ✓  #btnTired ✓  #btnExcited ✓  #btnWorried ✓
+      /* =====================================================
+         SPACE QUIZ LOGIC
+      ===================================================== */
+
+      // All quiz questions — easy to add more!
+      var questions = [
+        {
+          question: '🪐 Which planet in our solar system has the most rings?',
+          answers:  ['Jupiter', 'Saturn', 'Uranus', 'Neptune'],
+          correct:  1,  // index of correct answer (Saturn)
+          funFact:  'Saturn has over 80 moons AND thousands of rings made of ice and rock chunks! 🪐'
+        },
+        {
+          question: '🌙 About how long does it take for the Moon to travel once around the Earth?',
+          answers:  ['1 week', '1 month', '6 months', '1 year'],
+          correct:  1,  // 1 month
+          funFact:  'The Moon orbits Earth in about 27 days — that\'s why we see different phases of the Moon each month! 🌕'
+        },
+        {
+          question: '⭐ What is the name of the galaxy that contains our Solar System?',
+          answers:  ['Andromeda', 'Sombrero', 'Milky Way', 'Whirlpool'],
+          correct:  2,  // Milky Way
+          funFact:  'The Milky Way has between 100 and 400 BILLION stars — and our Sun is just one of them! 🌌'
+        }
+      ];
+
+      // Quiz state variables
+      var currentQ  = 0;   // which question we're on
+      var score     = 0;   // how many correct
+      var answered  = false; // has the user answered the current question?
+
+      // Grab quiz screen elements
+      var quizStart    = document.getElementById('quizStart');
+      var quizQuestion = document.getElementById('quizQuestion');
+      var quizScore    = document.getElementById('quizScore');
+      var qProgress    = document.getElementById('qProgress');
+      var qText        = document.getElementById('qText');
+      var answersGrid  = document.getElementById('answersGrid');
+      var feedbackBar  = document.getElementById('feedbackBar');
+      var nextBtn      = document.getElementById('nextBtn');
+      var startQuizBtn = document.getElementById('startQuizBtn');
+      var playAgainBtn = document.getElementById('playAgainBtn');
+      var scoreNum     = document.getElementById('scoreNum');
+      var scoreMsg     = document.getElementById('scoreMsg');
+      var scoreEmoji   = document.getElementById('scoreEmoji');
+
+      // Show a specific screen, hide others
+      function showScreen(name) {
+        quizStart.style.display    = (name === 'start')    ? 'block' : 'none';
+        quizQuestion.style.display = (name === 'question') ? 'block' : 'none';
+        quizScore.style.display    = (name === 'score')    ? 'block' : 'none';
+      }
+
+      // Load and display the current question
+      function loadQuestion() {
+        answered = false;
+        var q = questions[currentQ];
+
+        // Update progress text
+        qProgress.textContent = 'Question ' + (currentQ + 1) + ' of ' + questions.length;
+
+        // Set question text
+        qText.textContent = q.question;
+
+        // Clear old answers and feedback
+        answersGrid.innerHTML = '';
+        feedbackBar.style.display = 'none';
+        feedbackBar.className     = '';
+        nextBtn.style.display     = 'none';
+
+        // Build answer buttons dynamically
+        q.answers.forEach(function(answerText, index) {
+          var btn = document.createElement('button');
+          btn.className   = 'ans-btn';
+          btn.textContent = answerText;
+          // When clicked, check the answer
+          btn.addEventListener('click', function() {
+            if (!answered) {
+              checkAnswer(index);
+            }
+          });
+          answersGrid.appendChild(btn);
+        });
+
+        showScreen('question');
+      }
+
+      // Check if the chosen answer is correct
+      function checkAnswer(chosenIndex) {
+        answered = true;
+        var q       = questions[currentQ];
+        var allAns  = answersGrid.querySelectorAll('.ans-btn');
+
+        // Disable all buttons so they can't click again
+        allAns.forEach(function(btn) { btn.disabled = true; });
+
+        // Highlight correct and wrong
+        allAns[q.correct].classList.add('correct');
+        if (chosenIndex !== q.correct) {
+          allAns[chosenIndex].classList.add('wrong');
+        }
+
+        // Show feedback bar
+        feedbackBar.style.display = 'block';
+        feedbackBar.style.animation = 'none';
+        void feedbackBar.offsetWidth;
+        feedbackBar.style.animation = 'popIn 0.3s ease';
+
+        if (chosenIndex === q.correct) {
+          score++;
+          feedbackBar.className   = 'correct-fb';
+          feedbackBar.innerHTML   = '✅ <strong>Correct!</strong> ' + q.funFact;
+        } else {
+          feedbackBar.className   = 'wrong-fb';
+          feedbackBar.innerHTML   = '❌ <strong>Not quite!</strong> The answer is <strong>' +
+                                    q.answers[q.correct] + '</strong>. ' + q.funFact;
+        }
+
+        // Show the Next / Finish button
+        nextBtn.style.display = 'block';
+        if (currentQ === questions.length - 1) {
+          nextBtn.textContent = '🏁 See My Score!';
+        } else {
+          nextBtn.textContent = 'Next Question ➡️';
+        }
+      }
+
+      // Show the final score screen
+      function showFinalScore() {
+        var total = questions.length;
+        scoreNum.textContent = score + ' / ' + total;
+
+        // Pick an emoji and message based on score
+        if (score === total) {
+          scoreEmoji.textContent = '🏆';
+          scoreMsg.textContent   = 'Perfect score! You\'re a true space expert! The universe needs a brilliant mind like yours! 🌌✨';
+        } else if (score >= total - 1) {
+          scoreEmoji.textContent = '🌟';
+          scoreMsg.textContent   = 'So close to perfect! You really know your space facts. Keep stargazing! 🔭';
+        } else {
+          scoreEmoji.textContent = '🚀';
+          scoreMsg.textContent   = 'Nice try, space cadet! Every astronaut needs practice. Play again to blast off to a higher score! 💫';
+        }
+        showScreen('score');
+      }
+
+      // Reset quiz state and go back to start (or jump straight into questions)
+      function resetQuiz() {
+        currentQ = 0;
+        score    = 0;
+        answered = false;
+        loadQuestion();
+      }
+
+      // ---- Button event listeners ----
+      if (startQuizBtn) startQuizBtn.addEventListener('click', function() {
+        resetQuiz();
+      });
+
+      if (nextBtn) nextBtn.addEventListener('click', function() {
+        currentQ++;
+        if (currentQ < questions.length) {
+          loadQuestion();
+        } else {
+          showFinalScore();
+        }
+      });
+
+      if (playAgainBtn) playAgainBtn.addEventListener('click', function() {
+        resetQuiz();
+      });
+
+      // Start by showing only the start screen
+      showScreen('start');
+
+      // BUTTON CHECKLIST:
+      // #btnHappy ✓  #btnTired ✓  #btnExcited ✓  #btnWorried ✓
+      // #startQuizBtn ✓  #nextBtn ✓  #playAgainBtn ✓
+      // Answer buttons are created dynamically and each gets addEventListener ✓
     });
   </script>
 
