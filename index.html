@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Hobby Page!</title>
+  <style>
+    /* === GENERAL PAGE STYLES === */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+      background: linear-gradient(135deg, #ffe066 0%, #ff8fab 50%, #a0c4ff 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* === HEADER / TITLE SECTION === */
+    .header {
+      text-align: center;
+      background: #fff;
+      border-radius: 30px;
+      padding: 30px 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+      border: 4px solid #ffb347;
+    }
+
+    .header .emoji-row {
+      font-size: 2.8rem;
+      margin-bottom: 8px;
+      letter-spacing: 6px;
+    }
+
+    .header h1 {
+      font-size: 2.8rem;
+      color: #ff5733;
+      text-shadow: 3px 3px 0px #ffb347;
+      line-height: 1.2;
+    }
+
+    .header .subtitle {
+      font-size: 1.2rem;
+      color: #888;
+      margin-top: 6px;
+    }
+
+    /* === INTRO CARD === */
+    .intro-card {
+      background: #fffbe6;
+      border-radius: 24px;
+      padding: 26px 28px;
+      margin-bottom: 24px;
+      border: 3px dashed #ffb347;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    .intro-avatar {
+      font-size: 5rem;
+      background: #ffe0f0;
+      border-radius: 50%;
+      padding: 14px 18px;
+      border: 3px solid #ff8fab;
+      flex-shrink: 0;
+    }
+
+    .intro-text h2 {
+      font-size: 1.7rem;
+      color: #c0392b;
+      margin-bottom: 8px;
+    }
+
+    .intro-text p {
+      font-size: 1.15rem;
+      color: #444;
+      line-height: 1.7;
+    }
+
+    .intro-text p span {
+      color: #e84393;
+      font-weight: bold;
+    }
+
+    /* === SECTION TITLE === */
+    .section-title {
+      text-align: center;
+      font-size: 1.9rem;
+      color: #fff;
+      text-shadow: 2px 2px 0 #e84393;
+      margin-bottom: 16px;
+      margin-top: 8px;
+    }
+
+    /* === FAVOURITE THINGS CARDS === */
+    .fav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .fav-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 28px 18px;
+      text-align: center;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+      transition: transform 0.18s;
+      border-top: 7px solid;
+    }
+
+    .fav-card:hover { transform: translateY(-7px) scale(1.03); }
+
+    .fav-card:nth-child(1) { border-color: #ff5733; }
+    .fav-card:nth-child(2) { border-color: #33c1ff; }
+    .fav-card:nth-child(3) { border-color: #6fcf00; }
+
+    .fav-card .fav-icon { font-size: 3.2rem; margin-bottom: 12px; }
+
+    .fav-card h3 {
+      font-size: 1.35rem;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .fav-card p {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* === WHY I LIKE IT SECTION === */
+    .why-section {
+      background: linear-gradient(135deg, #a0c4ff, #c9b1ff);
+      border-radius: 28px;
+      padding: 30px 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.13);
+    }
+
+    .why-section h2 {
+      font-size: 2rem;
+      color: #fff;
+      text-align: center;
+      text-shadow: 2px 2px 0 #6c5ce7;
+      margin-bottom: 18px;
+    }
+
+    .why-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .why-list li {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px 18px;
+      margin-bottom: 13px;
+      font-size: 1.1rem;
+      color: #444;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      line-height: 1.5;
+    }
+
+    .why-list li .bullet-icon { font-size: 1.8rem; flex-shrink: 0; }
+
+    /* === FUN FACT BANNER === */
+    .fun-fact {
+      background: #fff;
+      border-radius: 22px;
+      padding: 20px 24px;
+      text-align: center;
+      border: 4px solid #ffe066;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+      margin-bottom: 24px;
+    }
+
+    .fun-fact .label {
+      font-size: 1rem;
+      color: #aaa;
+      margin-bottom: 6px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .fun-fact p {
+      font-size: 1.25rem;
+      color: #ff5733;
+      font-weight: bold;
+    }
+
+    /* === FOOTER === */
+    footer {
+      text-align: center;
+      font-size: 1.05rem;
+      color: #fff;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      padding-bottom: 10px;
+    }
+
+    /* === MOBILE TWEAKS === */
+    @media (max-width: 500px) {
+      .header h1 { font-size: 2rem; }
+      .intro-card { flex-direction: column; text-align: center; }
+      .why-section { padding: 22px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== BIG TITLE HEADER ===== -->
+  <div class="header">
+    <div class="emoji-row">🎨 🖌️ ✏️ 🎨</div>
+    <h1>My Favourite Hobby:<br/>Drawing & Art!</h1>
+    <p class="subtitle">A webpage made with ❤️ by a Grade 5 student</p>
+  </div>
+
+  <!-- ===== SELF INTRODUCTION ===== -->
+  <div class="intro-card">
+    <div class="intro-avatar">🧒</div>
+    <div class="intro-text">
+      <h2>👋 Hi, I'm Alex!</h2>
+      <p>
+        I'm 10 years old and I'm in <span>Grade 5</span>. 
+        My absolute favourite thing to do after school is <span>drawing and making art</span>. 
+        I love creating pictures of animals, fantasy worlds, and my friends. 
+        Art makes me feel <span>happy and calm</span>, and I've been drawing 
+        since I was just 4 years old! 🌟
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== THREE FAVOURITE THINGS ===== -->
+  <p class="section-title">⭐ My 3 Favourite Things About Drawing ⭐</p>
+  <div class="fav-grid">
+
+    <!-- Card 1 -->
+    <div class="fav-card">
+      <div class="fav-icon">🦄</div>
+      <h3>Drawing Animals</h3>
+      <p>
+        My favourite thing to draw is fantasy animals like unicorns and dragons. 
+        I love making up their colours and patterns!
+      </p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="fav-card">
+      <div class="fav-icon">🖍️</div>
+      <h3>Trying New Tools</h3>
+      <p>
+        I love experimenting with pencils, markers, watercolours, and even 
+        digital drawing on a tablet. Each tool feels different!
+      </p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="fav-card">
+      <div class="fav-icon">📖</div>
+      <h3>Making Comics</h3>
+      <p>
+        I make my own comic strips with funny characters. 
+        My best comic is about a superhero cat named Captain Whiskers! 🐱
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ===== WHY I LIKE IT ===== -->
+  <div class="why-section">
+    <h2>💜 Why I Like Drawing</h2>
+    <ul class="why-list">
+      <li>
+        <span class="bullet-icon">😌</span>
+        <span>It <strong>relaxes me</strong> after a busy day at school — drawing feels like a mini-vacation for my brain!</span>
+      </li>
+      <li>
+        <span class="bullet-icon">🌍</span>
+        <span>I can <strong>create my own worlds</strong> and characters that exist only in my imagination.</span>
+      </li>
+      <li>
+        <span class="bullet-icon">🤝</span>
+        <span>My friends love it when I draw pictures <strong>of them as superheroes</strong> — it makes everyone smile!</span>
+      </li>
+      <li>
+        <span class="bullet-icon">🏆</span>
+        <span>I entered a <strong>school art contest</strong> last year and won second place — that made me so proud!</span>
+      </li>
+      <li>
+        <span class="bullet-icon">🚀</span>
+        <span>One day I want to be a <strong>game designer or comic artist</strong> — drawing is my first step!</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ===== FUN FACT BANNER ===== -->
+  <div class="fun-fact">
+    <p class="label">🌟 Fun Fact About Me 🌟</p>
+    <p>
+      I have filled up 5 whole sketchbooks this year alone — 
+      that's over 300 drawings! 📚✏️
+    </p>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    Made with 🎨 and lots of ❤️ by Alex, Grade 5 &nbsp;|&nbsp; Keep creating! ✨
+  </footer>
+
+  <script>
+    // No interactive JS needed for this info page,
+    // but we add a little fun hover sparkle effect on the fav cards!
+    document.addEventListener('DOMContentLoaded', function() {
+
+      // Add a little bounce animation when the page loads
+      var header = document.querySelector('.header');
+      if (header) {
+        header.style.animation = 'none';
+        // Quick pop-in effect
+        header.style.transform = 'scale(0.95)';
+        header.style.transition = 'transform 0.4s ease';
+        setTimeout(function() {
+          header.style.transform = 'scale(1)';
+        }, 100);
+      }
+
+      // Make the favourite cards pop when clicked on mobile (tap feedback)
+      var favCards = document.querySelectorAll('.fav-card');
+      favCards.forEach(function(card) {
+        card.addEventListener('click', function() {
+          // Flash a highlight color briefly
+          var original = card.style.background;
+          card.style.background = '#fffbe6';
+          card.style.transition = 'background 0.2s';
+          setTimeout(function() {
+            card.style.background = original || '#fff';
+          }, 350);
+        });
+      });
+
+      // Make the why-list items animate in one by one
+      var whyItems = document.querySelectorAll('.why-list li');
+      whyItems.forEach(function(item, index) {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-20px)';
+        item.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        setTimeout(function() {
+          item.style.opacity = '1';
+          item.style.transform = 'translateX(0)';
+        }, 300 + index * 150);
+      });
+
+      // BUTTON CHECKLIST: No buttons on this page ✓
+    });
+  </script>
+
+</body>
+</html>
